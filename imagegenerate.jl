@@ -35,7 +35,6 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L)
         etol = 1.e-12
         
         if ~isnan(s)
-
             for k in 1:n 
                 if abs(s-R[k])<etol
                     L_i=L(iters)
@@ -43,10 +42,9 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L)
                     Iter[lin,col] = iters
                 end
             end
-        else
-            imagem[lin,col] = RGB(0.0,0.0,0.0)
-            Iter[lin,col] = iters
         end
     end
+    
     return imagem, Iter, colors
+
 end
