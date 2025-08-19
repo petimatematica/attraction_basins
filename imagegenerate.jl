@@ -1,21 +1,24 @@
-using Plots,FileIO,ColorSchemes,Images # Carregando os pacotes necessários
-include("partition.jl"); include("newton.jl") # incluindo os arquivos suporte
+using Plots,FileIO,ColorSchemes,Images # loading the necessary packages
+include("partition.jl"); include("newton.jl") # including the necessary files 
 
-# interval_x, interval_y - intervalos cujo produto cartesiano gera a região retangular desejada, ou seja, que contém todos os zeros da função complexa f
-# n_x - número de células homogêneas ao particionar interval_x
-# n_y - número de células homogêneas ao particionar interval_x
-# R - vetor que contém todos os zeros da função complexa f
+# f - holomorphic function which we want to find its zeros
+# df - complex derivative of f
+# interval_x, interval_y - intervals which its cartesian product generates the rectangular region desired that contains all the zeros of the complex function f
+# n_x - number of homogenuous cells of the partition of interval_x
+# n_y - number of homogenuous cells of the partition of interval_y
+# R - vector with all the zeros of f
+# L - "light-intensity functions" is a monotonic real valued function limited in (0,1] that weights the RGB color in each pixel based on number of iterates
 function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L)
-    imagem = Matrix{RGB{Float64}}(undef,n_y,n_x)
-    Iter = Matrix{Int64}(undef,n_y,n_x)
+    image = Matrix{RGB{Float64}}(undef,n_y,n_x) # create a image with resolution of n_y by n_x 
+    Iter = Matrix{Int64}(undef,n_y*n_x) # create a vector with n_y by n_x entries which we will to store the number of iterates 
 
-    # Índices de Linha e Coluna
-    global lin = 0
+    # row and column indexes
+    global row = 0
     global col = 0
 
-    # Obtenção das cores
-    n=length(R)
-    colors = cgrad(:lighttest,n,categorical=true)
+    # color acquisition
+    n=length(R) # n is the number of the zeros of f
+    colors = cgrad(:lighttest,n,categorical=true) # this guarantees that each zero has its own color
 
     # Obtenção dos chutes
     chutes = partition_rectangle(interval_x, interval_y, n_x, n_y)
@@ -48,3 +51,4 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L)
     return imagem, Iter, colors
 
 end
+
