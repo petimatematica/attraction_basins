@@ -49,6 +49,7 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L; epsilon=1.
                     L_i=L(iters)
                     imagem[lin,col] = L_i*colors[k]
                     Iter[lin,col] = iters
+                    break
                 end
             end
         else
@@ -60,6 +61,7 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L; epsilon=1.
     return imagem, Iter, colors
 
 end
+
 
 
 
