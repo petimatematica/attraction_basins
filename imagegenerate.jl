@@ -18,7 +18,8 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L)
 
     # color acquisition
     n=length(R) # n is the number of the zeros of f
-    colors = cgrad(:lighttest,n,categorical=true) # this guarantees that each zero has its own color
+    color = cgrad([:seagreen,:royalblue4,:magenta3,:crimson,:darkorange2])
+    colors = cgrad(color,n,categorical=true) # this guarantees that each zero has its own color
 
     # Obtenção dos chutes
     chutes = partition_rectangle(interval_x, interval_y, n_x, n_y)
@@ -51,6 +52,7 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L)
     return imagem, Iter, colors
 
 end
+
 
 
 
