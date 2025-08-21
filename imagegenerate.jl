@@ -8,7 +8,7 @@ include("partition.jl"); include("newton.jl") # including the necessary files
 # n_y - number of homogenuous cells of the partition of interval_y
 # R - vector with all the zeros of f
 # L - "light-intensity functions" is a monotonic real valued function limited in (0,1] that weights the RGB color in each pixel based on number of iterates
-function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L)
+function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L; epsilon=1.e-12, factor=10)
     imagem = Matrix{RGB{Float64}}(undef,n_y,n_x) # create a image with resolution of n_y by n_x 
     Iter = Matrix{Int64}(undef,n_y,n_x) # create a vector with n_y by n_x entries which we will to store the number of iterates
     for i in 1:n_y
@@ -27,7 +27,7 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L)
     colors = cgrad(color,n,categorical=true) # this guarantees that each zero has its own color
 
     # Obtenção dos chutes
-    chutes = partition_rectangle(interval_x, interval_y, n_x, n_y)
+    chutes = partition_rectangle(interval_x, interval_y, n_x, n_y, tol=epsilon)
 
     for i in 1:size(chutes,1)
 
@@ -41,7 +41,7 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L)
             else
                 global col += 1
             end
-        etol = 1.e-12
+        etol = epsilon*factor
         
         if ~isnan(s)
             for k in 1:n 
@@ -60,6 +60,7 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L)
     return imagem, Iter, colors
 
 end
+
 
 
 
