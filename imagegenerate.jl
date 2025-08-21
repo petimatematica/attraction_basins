@@ -9,11 +9,11 @@ include("partition.jl"); include("newton.jl") # including the necessary files
 # R - vector with all the zeros of f
 # L - "light-intensity functions" is a monotonic real valued function limited in (0,1] that weights the RGB color in each pixel based on number of iterates
 function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L)
-    image = Matrix{RGB{Float64}}(undef,n_y,n_x) # create a image with resolution of n_y by n_x 
+    imagem = Matrix{RGB{Float64}}(undef,n_y,n_x) # create a image with resolution of n_y by n_x 
     Iter = Matrix{Int64}(undef,n_y*n_x) # create a vector with n_y by n_x entries which we will to store the number of iterates 
 
     # row and column indexes
-    global row = 0
+    global lin = 0
     global col = 0
 
     # color acquisition
@@ -51,4 +51,5 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L)
     return imagem, Iter, colors
 
 end
+
 
