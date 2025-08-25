@@ -8,7 +8,7 @@ include("partition.jl"); include("newton.jl") # including the necessary files
 # n_y - number of homogenuous cells of the partition of interval_y
 # R - vector with all the zeros of f
 # L - "light-intensity functions" is a monotonic real valued function limited in (0,1] that weights the RGB color in each pixel based on number of iterates
-function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L; epsilon=1.e-12, factor=10)
+function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-12, factor=10,iter=40)
     imagem = Matrix{RGB{Float64}}(undef,n_y,n_x) # create a image with resolution of n_y by n_x 
     Iter = Matrix{Int64}(undef,n_y,n_x) # create a vector with n_y by n_x entries which we will to store the number of iterates
     for i in 1:n_y
@@ -23,8 +23,8 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L; epsilon=1.
 
     # color acquisition
     n=length(R) # n is the number of the zeros of f
-    color = cgrad([:seagreen,:royalblue4,:magenta3,:crimson,:darkorange2])
-    colors = cgrad(color,n,categorical=true) # this guarantees that each zero has its own color
+    colors= cgrad([:darkblue,:cyan,:yellow,:orange,:red,:red4])
+    m=length(colors.colors)
 
     # Obtenção dos chutes
     chutes = partition_rectangle(interval_x, interval_y, n_x, n_y)
@@ -33,7 +33,7 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L; epsilon=1.
 
         global z0 = chutes[i]
         
-        s,iters = newton_method(z0, f, df;tol=epsilon)
+        s,iters = newton_method(z0, f, df;tol=epsilon, max_iter=iter)
 
         if i % n_y == 1
                 global col = 1
@@ -46,26 +46,24 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L; epsilon=1.
         if ~isnan(s)
             for k in 1:n 
                 if abs(s-R[k])<etol
-                    L_i=L(iters)
-                    imagem[lin,col] = L_i*colors[k]
+                    #L_i=L(iters)
+                    imagem[lin,col] = colors[iters/iter]
                     Iter[lin,col] = iters
                     break
                 end
             end
         else
-            imagem[lin,col] = RGB(0.0,0.0,0.0)
-            Iter[lin,col] = iters
+            if iters == -1
+                imagem[lin,col] = RGB(0.0,0.0,0.0)
+                Iter[lin,col] = iters
+            end
+            if iters == -2
+                imagem[lin,col] = colors[m]
+                Iter[lin,col] = iters
+            end
         end
     end
     
     return imagem, Iter, colors
 
 end
-
-
-
-
-
-
-
-
