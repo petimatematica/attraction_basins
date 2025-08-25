@@ -8,9 +8,7 @@ interval_y = (-2.0,2.0)
 n_x = 3000
 n_y = 3000
 
-L(x;c=0.5)=c*x/(c*x+1) # Função itensidade de cor
-
 f,df,R=problemX()
 
-imagem, iter, colors = image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L)
+imagem, iter, colors = image_generator(f,df,interval_x, interval_y, n_x, n_y, R)
 save("teste.png", colorview(RGB, imagem))
