@@ -1,5 +1,5 @@
 # Método de Newton
-function newton_method(x0,f,df; tol=1e-122, max_iter=40)
+function newton_method(x0,f,df; tol=1e-12, max_iter=40)
     x = x0
     for iter in 0:max_iter
         fx=f(x)
@@ -19,3 +19,4 @@ function newton_method(x0,f,df; tol=1e-122, max_iter=40)
     end
     return NaN,-2 # -2 informa que o método não convergiu em max_iter iterações
 end
+
