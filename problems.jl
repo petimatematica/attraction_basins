@@ -211,3 +211,12 @@ function problemIX()
 
     return f, df, R
 end
+
+
+function problemX()
+    f(z) = z^7 - 1.0
+    df(z) = 7.0*z^6
+    R = [cos(2*π*k/7.) + sin(2*π*k/7)im for k in 0:6]
+    return f,df,R
+end
+

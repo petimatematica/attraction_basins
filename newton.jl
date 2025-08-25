@@ -1,5 +1,5 @@
 # Método de Newton
-function newton_method(x0,f,df; tol=1e-12, max_iter=100)
+function newton_method(x0,f,df; tol=1e-122, max_iter=40)
     x = x0
     for iter in 0:max_iter
         fx=f(x)

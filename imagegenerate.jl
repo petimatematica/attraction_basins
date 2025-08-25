@@ -27,15 +27,15 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R, L; epsilon=1.
     colors = cgrad(color,n,categorical=true) # this guarantees that each zero has its own color
 
     # Obtenção dos chutes
-    chutes = partition_rectangle(interval_x, interval_y, n_x, n_y, tol=epsilon)
+    chutes = partition_rectangle(interval_x, interval_y, n_x, n_y)
 
     for i in 1:size(chutes,1)
 
         global z0 = chutes[i]
         
-        s,iters = newton_method(z0, f, df)
+        s,iters = newton_method(z0, f, df;tol=epsilon)
 
-        if i % n_x == 1
+        if i % n_y == 1
                 global col = 1
                 global lin += 1
             else
