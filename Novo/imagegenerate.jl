@@ -17,10 +17,9 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-1
 
     # color acquisition
     n=length(R) # n is the number of the zeros of f
-    light_colors = distinguishable_colors(n, [RGB(1,1,1), RGB(0,0,0)], dropseed=true, cchoices=500:10:600)
-    dark_colors = 0.5*light_colors
-    # colors = cgrad(color,n,categorical=true) # this guarantees that each zero has its own color
-
+    colors = distinguishable_colors(n+1, [RGB(1,1,1), RGB(0,0,0)], dropseed=true, cchoices=20:30)
+    palette = cgrad(colors)
+    
     # Obtenção dos chutes
     chutes = partition_rectangle(interval_x, interval_y, n_x, n_y)
 
@@ -28,7 +27,7 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-1
 
         global z0 = chutes[i]
         
-        s,iters = newton_method(z0, f, df;tol=epsilon)
+        s,iters = newton_method(z0, f, df;tol=epsilon,max_iter=iter)
 
         if i % n_y == 1
                 global col = 1
@@ -41,8 +40,7 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-1
         if ~isnan(s)
             for k in 1:n 
                 if abs(s-R[k])<etol
-                    palette = cgrad([dark_colors[k],light_colors[k]])
-                    imagem[lin,col] = palette[iters/iter]
+                    imagem[lin,col] = palette[(k-1)/n*0.99+iters/(n*iter)]
                     Iter[lin,col] = iters
                     break
                 end
@@ -55,6 +53,6 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-1
         end
     end
     
-    return imagem, Iter, colors
+    return imagem, Iter
 
 end
