@@ -97,5 +97,3 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-1
 	return imagem, Iter
 	
 end
-
-using Colors
