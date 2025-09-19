@@ -1,22 +1,21 @@
-using Plots,FileIO,ColorSchemes,Images # loading the necessary packages
-include("newton.jl") # including the necessary files 
+using Plots,FileIO,ColorSchemes,Images # carregando os pacotes necessários
+include("newton.jl") # incluindo o método de Newton 
 
-# f - holomorphic function which we want to find its zeros
-# df - complex derivative of f
-# interval_x, interval_y - intervals which its cartesian product generates the rectangular region desired that contains all the zeros of the complex function f
-# n_x - number of homogenuous cells of the partition of interval_x
-# n_y - number of homogenuous cells of the partition of interval_y
-# R - vector with all the zeros of f
+# f - função holomorfa que desejamos encontrar seus zeros
+# df - derivada complexa de f
+# interval_x, interval_y - intervalos onde seu produto cartesiano gera um região retangular que contém todos os zeros
+# n_x - número de células homogêneas da partição de interval_x
+# n_y - número de células homogêneas da partição de interval_x
 function image_generator_iter(f,df,interval_x, interval_y, n_x, n_y; epsilon=1.e-12, iter=40)
-    imagem = Matrix{RGB{Float64}}(undef,n_y,n_x) # create a image with resolution of n_y by n_x 
-    Iter = Matrix{Int64}(undef,n_y,n_x) # create a vector with n_y by n_x entries which we will to store the number of iterates
+    imagem = Matrix{RGB{Float64}}(undef,n_y,n_x) # cria uma imagem de resolução n_y por n_x  
+    Iter = Matrix{Int64}(undef,n_y,n_x) # cria um vetor com n_y por n_x entradas que armazenarão o número de iteradas
     for i in 1:n_y
         for j in 1:n_x
             imagem[i,j]=RGB(1.0,1.0,1.0)
         end
     end
 
-    # color acquisition
+    # aquisição de cores
     colors= cgrad([:darkblue,:cyan,:yellow,:orange,:red,:red4],[.0, .26, .5, .6, .7, 1])
     m=length(colors.colors)
     
@@ -46,5 +45,6 @@ function image_generator_iter(f,df,interval_x, interval_y, n_x, n_y; epsilon=1.e
 	end
 	     
 	return imagem, Iter
+
 
 end
