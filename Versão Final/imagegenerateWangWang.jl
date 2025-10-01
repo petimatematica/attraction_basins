@@ -1,5 +1,5 @@
-using Plots,FileIO,ColorSchemes,Images,Colors # loading the necessary packages
-include("newton.jl") # including the necessary files 
+using Images # salvar imagens e acesso ao sistema de cores RGB
+include("newton.jl") # incluindo os arquivos necessários 
 
 # f - holomorphic function which we want to find its zeros
 # df - complex derivative of f
@@ -11,11 +11,8 @@ include("newton.jl") # including the necessary files
 function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-5, iter = 20, factor=1.e+3)
 	imagem = Matrix{RGB{Float64}}(undef,n_y,n_x) # create a image with resolution of n_y by n_x 
     Iter = Matrix{Int64}(undef,n_y,n_x) # create a vector with n_y by n_x entries which we will to store the number of iterates
-
-    # color acquisition
-    n=length(R) # n is the number of the zeros of f
-    #colors = distinguishable_colors(n+1, [RGB(1,1,1), RGB(0,0,0)], dropseed=true, lchoices=20:30, cchoices=80:100)
-    #palette = cgrad(colors)
+	
+    n=length(R) # n é o número de zeros de f
         
     # Criar partições para os dois intervalos
     x_points = range(interval_x[1], interval_x[2], length=n_x)
