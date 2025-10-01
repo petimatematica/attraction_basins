@@ -1,4 +1,4 @@
-using Plots,FileIO,ColorSchemes,Images # carregando os pacotes necessários
+using Images # salvar imagens e acesso ao sistema de cores RGB
 include("newton.jl") # incluindo o método de Newton 
 
 # f - função holomorfa que desejamos encontrar seus zeros
@@ -47,4 +47,5 @@ function image_generator_iter(f,df,interval_x, interval_y, n_x, n_y; epsilon=1.e
 	return imagem, Iter
 	
 end
+
 
