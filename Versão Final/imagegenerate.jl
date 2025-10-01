@@ -1,4 +1,4 @@
-using Plots,FileIO,ColorSchemes,Images,Colors # carregando os pacotes necessários
+using Images # carregando o pacote necessário
 include("newton.jl") # incluindo o método de Newton
 
 function generate_color_pairs(n::Int)
