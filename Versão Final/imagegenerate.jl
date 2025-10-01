@@ -1,4 +1,4 @@
-using Images # carregando o pacote necessário
+using Images # salvar imagens e acesso ao sistema de cores RGB
 include("newton.jl") # incluindo o método de Newton
 
 function generate_color_pairs(n::Int)
