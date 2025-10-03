@@ -6,16 +6,25 @@ include("newton.jl") # incluindo o método de Newton
 #= 
 Variável obrigatória:
 - n (Int64) - número de cores base a gerar
+
+Variáveis opcionais:
+- l_min (Int64) - valor mínimo de luminosidade (valores possíveis: 0 a 100) (padrão 60)
+- l_max (Int64) - valor máximo de luminosidade (valores possíveis: 0 a 100) (padrão 75)
+- c_min (Int64) - valor mínimo de saturação (valores possíveis: 0 a 100) (padrão 80)
+- c_max (Int64) - valor máximo de saturação (valores possíveis: 0 a 100) (padrão 100)
+- h_min (Int64) - valor mínimo do matiz (pesquise sobre círculo cromático) (valores possíveis de ângulo: 0 a 360) (padrão 0)
+- h_max (Int64) - valor máximo do matiz (pesquise sobre círculo cromático) (valores possíveis de ângulo: 0 a 360) (padrão 360)
 =#
 #----------------------------------------------------------------------------------------------
 
-function generate_color_pairs(n::Int)
+function generate_color_pairs(n::Int;l_min=60,l_max=75,c_min=60,c_max=75,h_min=0,h_max=360)
     # Gerar n cores base, com luminosidade média e croma alto para serem bem vivas.
     base_colors = distinguishable_colors(n, 
                                          [RGB(1,1,1), RGB(0,0,0)], # Cores a evitar
                                          dropseed=true, 
-                                         lchoices=60:75, # Luminosidade
-                                         cchoices=80:100) # Saturação
+                                         lchoices=l_min:l_max, # Luminosidade
+                                         cchoices=c_min:c_max, # Saturação
+										 hchoices=h_min:h_max) # Matiz 
 
     dark_colors = RGB{Float64}[] # vetor que armazenará a versão escura das cores base
     light_colors = RGB{Float64}[] # vetor que armazenará a versão clara das cores base
@@ -52,18 +61,27 @@ Variáveis obrigatória:
 - interval_x, interval_y (Vector{Float64}) - intervalos onde seu produto cartesiano gera uma região retangular que contém todos os zeros
 - n_x (Int64) - número de células homogêneas da partição de interval_x
 - n_y (Int64) - número de células homogêneas da partição de interval_y
-- R - vetor contendo todos os zeros da função f
+- R (Vector{ComplexF64}) - vetor contendo todos os zeros da função f
 
 Variáveis opcionais:
+- epsilon (Float64) - tolerância prescrita ao Método de Newton
+- iter (Int64) - número máximo de iteradas
+- factor (Float64) - altera a tolerância do teste do erro absoluto
+- l (Float64) - altera a luminosidade da imagem
+- l_m (Int64) - valor mínimo de luminosidade (valores possíveis: 0 a 100) (padrão 60)
+- l_M (Int64) - valor máximo de luminosidade (valores possíveis: 0 a 100) (padrão 75)
+- c_m (Int64) - valor mínimo de saturação (valores possíveis: 0 a 100) (padrão 80)
+- c_M (Int64) - valor máximo de saturação (valores possíveis: 0 a 100) (padrão 100)
+- h_m (Int64) - valor mínimo do matiz (pesquise sobre círculo cromático) (valores possíveis de ângulo: 0 a 360) (padrão 0)
+- h_M (Int64) - valor máximo do matiz (pesquise sobre círculo cromático) (valores possíveis de ângulo: 0 a 360) (padrão 360)
 =#
 #----------------------------------------------------------------------------------------------
-function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-12, iter = 40, factor=10, l=0)
+function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-12, iter = 40, factor=10, l=0, l_m=60, l_M=75, c_m=60, c_M=75, h_m=0, h_M=360)
 	imagem = Matrix{RGB{Float64}}(undef,n_y,n_x) # cria uma imagem de resolução n_y por n_x 
-    Iter = Matrix{Int64}(undef,n_y,n_x) # cria um vetor com n_y por n_x entradas que armazenarão o número de iteradas
 
     # aquisição de cores
     n=length(R) # n é o número de zeros de f
-    dark_colors, light_colors = generate_color_pairs(n)
+    dark_colors, light_colors = generate_color_pairs(n,l_min=l_m,l_max=l_M,c_min=c_m,c_max=c_M,h_min=h_m,h_max=h_M)
         
     # Criar partições para os dois intervalos
     x_points = range(interval_x[1], interval_x[2], length=n_x)
@@ -77,12 +95,11 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-1
 			
 			if ~isnan(s)
             	for k in 1:n 
-                	if abs(s-R[k])<etol
+                	if abs(s-R[k])<etol # teste do erro absoluto
                 		
-                		# fator RGB
 			    		mult1=iters-1
 			    		mult2=iter-1
-			    		mult=mult1/mult2
+			    		mult=mult1/mult2 # fator utilizado para que as tonalidades dependam do número de iteradas
 			    		
 			    		# extraindo as coordenadas RGB da cor escura
 			    		d_r=dark_colors[k].r
@@ -100,19 +117,70 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-1
 			    		b = max(0,min(1,d_b+(l_b-d_b+l/255)*mult)) # componente azul
 			    		
                			imagem[n_y-lin+1,col]=RGB(r,g,b) # pinta o pixel na cor correspondente
-               			Iter[n_y-lin+1,col] = iters # armazena o número de iteradas
                         break
                     end
                 end
             else
-            	if iters == -2 # o número de iteradas excedeu o número máximo de iteradas
+				if iters == -1 # derivada em módulo muito pequena
                 	imagem[n_y-lin+1,col] = RGB(1.0,1.0,1.0) # pinta o pixel de branco
-                	Iter[n_y-lin+1,col] = iters # armazena o número de iteradas
+            	end
+            	if iters == -2 # o número de iteradas excedeu o número máximo de iteradas
+                	imagem[n_y-lin+1,col] = RGB(0.0,0.0,0.0) # pinta o pixel de preto
             	end
             end
  	    end	
 	end
 	     
-	return imagem, Iter
+	return imagem
+	
+end
+
+# Criar uma imagem das bacias de atração geradas pelo Método de Newton sem considerar o número de iteradas
+function image_generator_off(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-12, iter = 40, factor=10, l=0, l_m=60, l_M=75, c_m=60, c_M=75, h_m=0, h_M=360)
+	imagem = Matrix{RGB{Float64}}(undef,n_y,n_x) # cria uma imagem de resolução n_y por n_x 
+
+    # aquisição de cores
+    n=length(R) # n é o número de zeros de f
+     base_colors = distinguishable_colors(n, 
+                                         [RGB(1,1,1), RGB(0,0,0), RGB(1,0,0)], # Cores a evitar
+                                         dropseed=true, 
+                                         lchoices=l_min:l_max, # Luminosidade
+                                         cchoices=c_min:c_max, # Saturação
+										 hchoices=h_min:h_max) # Matiz 
+        
+    # Criar partições para os dois intervalos
+    x_points = range(interval_x[1], interval_x[2], length=n_x)
+    y_points = range(interval_y[1], interval_y[2], length=n_y)
+
+	for lin in n_y:-1:1
+	    for col in 1:n_x
+	        z0 = x_points[col]+y_points[lin]*im # Gerando o chute
+		    s,iters = newton_method(z0, f, df;tol=epsilon,max_iter=iter)
+		    etol = epsilon*factor
+			
+			if ~isnan(s)
+            	for k in 1:n 
+					if abs(z0-R[k])<min(n_x*0.02,n_y*0.02)
+						imagem[n_y-lin+1,col] = RGB(1.0,0.0,0.0) # pinta o pixel de vermelho
+						break
+					else
+						if abs(s-R[k])<etol # teste do erro absoluto
+							imagem[n_y-lin+1,col] = base_colors[k]
+							break
+						end
+					end
+                end
+            else
+				if iters == -1 # derivada em módulo muito pequena
+                	imagem[n_y-lin+1,col] = RGB(1.0,1.0,1.0) # pinta o pixel de branco
+            	end
+            	if iters == -2 # o número de iteradas excedeu o número máximo de iteradas
+                	imagem[n_y-lin+1,col] = RGB(0.0,0.0,0.0) # pinta o pixel de preto
+            	end
+            end
+ 	    end	
+	end
+	     
+	return imagem
 	
 end
