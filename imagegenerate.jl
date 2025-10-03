@@ -112,9 +112,9 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-1
 			    		l_b=light_colors[k].b
 			    		
 			    		# salvaguardando valores fora do intervalo [0,1]
-			    		r = max(0,min(1,d_r+(l_r-d_r+l/255)*mult)) # componente vermelha
-			    		g = max(0,min(1,d_g+(l_g-d_g+l/255)*mult)) # componente verde
-			    		b = max(0,min(1,d_b+(l_b-d_b+l/255)*mult)) # componente azul
+			    		r = max(0,min(1,l_r+(d_r-l_r-l/255)*mult)) # componente vermelha
+			    		g = max(0,min(1,l_g+(d_g-l_g-l/255)*mult)) # componente verde
+			    		b = max(0,min(1,l_b+(d_b-l_b-l/255)*mult)) # componente azul
 			    		
                			imagem[n_y-lin+1,col]=RGB(r,g,b) # pinta o pixel na cor correspondente
                         break
@@ -136,7 +136,7 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-1
 end
 
 # Criar uma imagem das bacias de atração geradas pelo Método de Newton sem considerar o número de iteradas
-function image_generator_off(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-12, iter = 40, factor=10, l=0, l_m=60, l_M=75, c_m=60, c_M=75, h_m=0, h_M=360)
+function image_generator_off(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-12, iter = 40, factor=10, l_m=60, l_M=75, c_m=60, c_M=75, h_m=0, h_M=360)
 	imagem = Matrix{RGB{Float64}}(undef,n_y,n_x) # cria uma imagem de resolução n_y por n_x 
 
     # aquisição de cores
@@ -144,9 +144,9 @@ function image_generator_off(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1
      base_colors = distinguishable_colors(n, 
                                          [RGB(1,1,1), RGB(0,0,0), RGB(1,0,0)], # Cores a evitar
                                          dropseed=true, 
-                                         lchoices=l_min:l_max, # Luminosidade
-                                         cchoices=c_min:c_max, # Saturação
-										 hchoices=h_min:h_max) # Matiz 
+                                         lchoices=l_m:l_M, # Luminosidade
+                                         cchoices=c_m:c_M, # Saturação
+										 hchoices=h_m:h_M) # Matiz 
         
     # Criar partições para os dois intervalos
     x_points = range(interval_x[1], interval_x[2], length=n_x)
@@ -160,7 +160,9 @@ function image_generator_off(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1
 			
 			if ~isnan(s)
             	for k in 1:n 
-					if abs(z0-R[k])<min(n_x*0.02,n_y*0.02)
+					delta_x = abs(interval_x[1]-interval_x[2])
+					delta_y = abs(interval_x[1]-interval_x[2])
+					if abs(z0-R[k])<min(delta_x*8.e-3,delta_y*8.e-3)
 						imagem[n_y-lin+1,col] = RGB(1.0,0.0,0.0) # pinta o pixel de vermelho
 						break
 					else
