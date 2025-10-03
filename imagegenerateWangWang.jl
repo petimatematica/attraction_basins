@@ -61,6 +61,6 @@ function image_generator_wang(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=
  	    end	
 	end
 	     
-	return imagem, Iter
+	return imagemr
 	
 end
