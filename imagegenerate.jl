@@ -136,7 +136,8 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-1
 end
 
 # Criar uma imagem das bacias de atração geradas pelo Método de Newton sem considerar o número de iteradas
-function image_generator_off(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-12, iter = 40, factor=10, l_m=60, l_M=75, c_m=60, c_M=75, h_m=0, h_M=360)
+# A função a seguir contém todos os parâmetros de image_generator mas com p ao invés de l e p é utilizado para alterar a largura dos pontos que indicam os zeros 
+function image_generator_off(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-12, iter = 40, factor=10, p=8.e-3, l_m=60, l_M=75, c_m=60, c_M=75, h_m=0, h_M=360)
 	imagem = Matrix{RGB{Float64}}(undef,n_y,n_x) # cria uma imagem de resolução n_y por n_x 
 
     # aquisição de cores
@@ -162,7 +163,7 @@ function image_generator_off(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1
             	for k in 1:n 
 					delta_x = abs(interval_x[1]-interval_x[2])
 					delta_y = abs(interval_x[1]-interval_x[2])
-					if abs(z0-R[k])<min(delta_x*8.e-3,delta_y*8.e-3)
+					if abs(z0-R[k])<min(delta_x*p,delta_y*p)
 						imagem[n_y-lin+1,col] = RGB(1.0,0.0,0.0) # pinta o pixel de vermelho
 						break
 					else
