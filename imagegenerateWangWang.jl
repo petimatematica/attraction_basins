@@ -1,16 +1,27 @@
 using Images # salvar imagens e acesso ao sistema de cores RGB
 include("newton.jl") # incluindo os arquivos necessários 
 
-# f - holomorphic function which we want to find its zeros
-# df - complex derivative of f
-# interval_x, interval_y - intervals which its cartesian product generates the rectangular region desired that contains all the zeros of the complex function f
-# n_x - number of homogenuous cells of the partition of interval_x
-# n_y - number of homogenuous cells of the partition of interval_y
-# R - vector with all the zeros of f
+# cria uma imagem das bacias de atração geradas pelo Método de Newton baseando-se no número de iteradas utilizando a metodologia de 
+#  Wang X. Y., Wang T. T., (2007), “Julia Sets of Generalized Newton’s Method”, Fractal, vol. 15, no. 4, pp. 323–336.
+#----------------------------------------------------------------------------------------------
+#= 
+Variáveis obrigatória:
+- f (Function) - função complexa holomorfa que desejamos mapear as bacias de atração
+- df (Function) - derivada de f
+- interval_x, interval_y (Vector{Float64}) - intervalos onde seu produto cartesiano gera uma região retangular que contém todos os zeros
+- n_x (Int64) - número de células homogêneas da partição de interval_x
+- n_y (Int64) - número de células homogêneas da partição de interval_y
+- R (Vector{ComplexF64}) - vetor contendo todos os zeros da função f
+- factor (Float64) - altera a tolerância do teste do erro absoluto (padrão 10^3)
+
+Variáveis opcionais:
+- epsilon (Float64) - tolerância prescrita ao Método de Newton (padrão 10^{-5})
+- iter (Int64) - número máximo de iteradas (padrão 20 iteradas)
+=#
+#----------------------------------------------------------------------------------------------
 
 function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-5, iter = 20, factor=1.e+3)
-	imagem = Matrix{RGB{Float64}}(undef,n_y,n_x) # create a image with resolution of n_y by n_x 
-    Iter = Matrix{Int64}(undef,n_y,n_x) # create a vector with n_y by n_x entries which we will to store the number of iterates
+	imagem = Matrix{RGB{Float64}}(undef,n_y,n_x) # cria uma imagem de resolução n_y por n_x 
 	
     n=length(R) # n é o número de zeros de f
         
@@ -32,13 +43,13 @@ function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-5
 			    		mult=mult1/mult2
                         # imagem[lin,col] = palette[(k-1)/n*0.99+iters/(n*iter)]
 			    		if k == 2 # vermelho
-			       			imagem[n_y-lin+1,col]=RGB((114+(249-114)*mult)/255,(43+(222-43)*mult)/255,(18+(213-18)*mult)/255)
+			       			imagem[n_y-lin+1,col]=RGB((114+(249-114)*mult)/255,(43+(222-43)*mult)/255,(18+(213-18)*mult)/255) # pinta o pixel na cor correspondente
 			    		end
 			    		if k == 1 # verde
-							imagem[n_y-lin+1,col]=RGB((22+(217-22)*mult)/255,(83+(247-83)*mult)/255,(17+(215-17)*mult)/255)
+							imagem[n_y-lin+1,col]=RGB((22+(217-22)*mult)/255,(83+(247-83)*mult)/255,(17+(215-17)*mult)/255) # pinta o pixel na cor correspondente
 			    		end
 			    		if k == 3 # azul
-							imagem[n_y-lin+1,col]=RGB((110+(255-110)*mult)/255,(110+(255-110)*mult)/255,125*mult/255)
+							imagem[n_y-lin+1,col]=RGB((110+(255-110)*mult)/255,(110+(255-110)*mult)/255,125*mult/255) # pinta o pixel na cor correspondente
 			    		end
                			
                			Iter[n_y-lin+1,col] = iters
