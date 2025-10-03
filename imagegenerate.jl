@@ -1,6 +1,14 @@
 using Images # salvar imagens e acesso ao sistema de cores RGB
 include("newton.jl") # incluindo o método de Newton
 
+# Gerar uma versão clara e uma versão escura de cores base
+#----------------------------------------------------------------------------------------------
+#= 
+Variável obrigatória:
+- n (Int64) - número de cores base a gerar
+=#
+#----------------------------------------------------------------------------------------------
+
 function generate_color_pairs(n::Int)
     # Gerar n cores base, com luminosidade média e croma alto para serem bem vivas.
     base_colors = distinguishable_colors(n, 
@@ -9,12 +17,12 @@ function generate_color_pairs(n::Int)
                                          lchoices=60:75, # Luminosidade
                                          cchoices=80:100) # Saturação
 
-    dark_colors = RGB{Float64}[] # vetor
-    light_colors = RGB{Float64}[]
+    dark_colors = RGB{Float64}[] # vetor que armazenará a versão escura das cores base
+    light_colors = RGB{Float64}[] # vetor que armazenará a versão clara das cores base
 
-    # Para cada cor base, criar uma versão escura e uma clara.
+    # Para cada cor base, criar uma versão escura e uma clara
     for color in base_colors
-        # Converter para LCHab para manipular a luminosidade facilmente
+        # Converter para o espaço de cores LCHab para manipular a luminosidade
         lch_color = convert(LCHab, color)
 
         # Criar a cor escura (L=0) e a clara (L=0), mantendo o croma e o matiz
@@ -38,6 +46,14 @@ end
 # R - vetor contendo todos os zeros da função f
 # l - parâmetro positivo que aumenta a luminosidade da imagem gerada
 
+
+# Gerar uma imagem onde c 
+#----------------------------------------------------------------------------------------------
+#= 
+Variável obrigatória:
+- n (Int64) - número de cores base a gerar
+=#
+#----------------------------------------------------------------------------------------------
 function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-12, iter = 40, factor=10, l=0)
 	imagem = Matrix{RGB{Float64}}(undef,n_y,n_x) # cria uma imagem de resolução n_y por n_x 
     Iter = Matrix{Int64}(undef,n_y,n_x) # cria um vetor com n_y por n_x entradas que armazenarão o número de iteradas
