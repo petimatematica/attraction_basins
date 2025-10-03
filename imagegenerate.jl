@@ -6,10 +6,10 @@ function generate_color_pairs(n::Int)
     base_colors = distinguishable_colors(n, 
                                          [RGB(1,1,1), RGB(0,0,0)], # Cores a evitar
                                          dropseed=true, 
-                                         lchoices=60:75, 
-                                         cchoices=80:100) 
+                                         lchoices=60:75, # Luminosidade
+                                         cchoices=80:100) # Saturação
 
-    dark_colors = RGB{Float64}[]
+    dark_colors = RGB{Float64}[] # vetor
     light_colors = RGB{Float64}[]
 
     # Para cada cor base, criar uma versão escura e uma clara.
