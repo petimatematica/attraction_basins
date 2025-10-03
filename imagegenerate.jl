@@ -37,8 +37,6 @@ function generate_color_pairs(n::Int)
     return dark_colors, light_colors
 end
 
-
-# interval_x, interval_y - intervalos onde seu produto cartesiano gera um região retangular que contém todos os zeros
 # n_x - número de células homogêneas da partição de interval_x
 # n_y - número de células homogêneas da partição de interval_x
 # R - vetor contendo todos os zeros da função f
@@ -48,10 +46,15 @@ end
 # Criar uma imagem das bacias de atração geradas pelo Método de Newton
 #----------------------------------------------------------------------------------------------
 #= 
-Variável obrigatória:
+Variáveis obrigatória:
 - f (Function) - função complexa holomorfa que desejamos mapear as bacias de atração
 - df (Function) - derivada de f
-- interval_x (Tuple{Float64, Float64}) - 
+- interval_x, interval_y (Vector{Float64}) - intervalos onde seu produto cartesiano gera uma região retangular que contém todos os zeros
+- n_x (Int64) - número de células homogêneas da partição de interval_x
+- n_y (Int64) - número de células homogêneas da partição de interval_y
+- R - vetor contendo todos os zeros da função f
+
+Variáveis opcionais:
 =#
 #----------------------------------------------------------------------------------------------
 function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-12, iter = 40, factor=10, l=0)
