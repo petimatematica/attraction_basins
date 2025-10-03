@@ -38,8 +38,6 @@ function generate_color_pairs(n::Int)
 end
 
 
-# f - função holomorfa que desejamos encontrar seus zeros
-# df - derivada complexa de f
 # interval_x, interval_y - intervalos onde seu produto cartesiano gera um região retangular que contém todos os zeros
 # n_x - número de células homogêneas da partição de interval_x
 # n_y - número de células homogêneas da partição de interval_x
@@ -47,11 +45,13 @@ end
 # l - parâmetro positivo que aumenta a luminosidade da imagem gerada
 
 
-# Gerar uma imagem onde c 
+# Criar uma imagem das bacias de atração geradas pelo Método de Newton
 #----------------------------------------------------------------------------------------------
 #= 
 Variável obrigatória:
-- n (Int64) - número de cores base a gerar
+- f (Function) - função complexa holomorfa que desejamos mapear as bacias de atração
+- df (Function) - derivada de f
+- interval_x (Tuple{Float64, Float64}) - 
 =#
 #----------------------------------------------------------------------------------------------
 function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-12, iter = 40, factor=10, l=0)
