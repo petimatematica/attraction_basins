@@ -51,9 +51,6 @@ function image_generator_wang(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=
 			    		if k == 3 # azul
 							imagem[n_y-lin+1,col]=RGB((110+(255-110)*mult)/255,(110+(255-110)*mult)/255,125*mult/255) # pinta o pixel na cor correspondente
 			    		end
-               			
-               			Iter[n_y-lin+1,col] = iters
-                        break
                     end
                 end
             else
