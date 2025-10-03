@@ -20,7 +20,7 @@ Variáveis opcionais:
 =#
 #----------------------------------------------------------------------------------------------
 
-function image_generator(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-5, iter = 20, factor=1.e+3)
+function image_generator_wang(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=1.e-5, iter = 20, factor=1.e+3)
 	imagem = Matrix{RGB{Float64}}(undef,n_y,n_x) # cria uma imagem de resolução n_y por n_x 
 	
     n=length(R) # n é o número de zeros de f
