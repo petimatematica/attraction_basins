@@ -59,7 +59,6 @@ function image_generator_wang(f,df,interval_x, interval_y, n_x, n_y, R; epsilon=
             else
             	if iters == -2
                 	imagem[n_y-lin+1,col] = RGB(1.0,1.0,1.0)
-                	Iter[n_y-lin+1,col] = iters
             	end
             end
  	    end	
