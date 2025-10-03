@@ -12,5 +12,5 @@ f=
 df=
 Z=
 
-imagem, iter = image_generator_off(f,df,interval_x,interval_y,n_x,n_y,Z) # invocando a função que gera as imagens
+imagem = image_generator_off(f,df,interval_x,interval_y,n_x,n_y,Z) # invocando a função que gera as imagens
 save("TesteI.png", colorview(RGB, imagem)) # salva uma imagem no formato png com o nome dado na String
