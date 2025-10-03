@@ -26,11 +26,12 @@ f(z)=z^3-1
 df(z)=3*z^2
 Z=[1.0+0.0im;-1/2+sqrt(3)/2im;-1/2-sqrt(3)/2im]
 
-imagem = image_generator(f,df,interval_x, interval_y, n_x, n_y, Z; epsilon=1.e-12, iter = 40, factor=10, l=100) # invocando a função que gera as imagens
+imagem = image_generator(f,df,interval_x, interval_y, n_x, n_y, Z; epsilon=1.e-12, iter = 40, factor=10, l=100)
 save("TesteI.png", colorview(RGB, imagem)) # salva uma imagem no formato png com o nome dado na String
 ```
 
 O código em Julia acima, gera a seguinte imagem
+![Alt text](https://github.com/petimatematica/attraction_basins/blob/main/Fractais/TesteI.png)
 
 # imagegenerate.jl
 Este arquivo contém a implementação de um programa que cria uma imagem das bacias de atração geradas pelo Método de Newton com ou sem contribuição do número de iteradas baseando-se nos zeros da função.
