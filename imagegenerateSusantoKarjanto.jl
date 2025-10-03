@@ -1,5 +1,6 @@
 using Images # salvar imagens e acesso ao sistema de cores RGB
-using ColorSchemes # Criação de gradientes e acesso a esquema de cores predefinidas
+using ColorSchemes # Acesso a esquema de cores predefinidas
+using Plots # Acesso a função cgrad que cria gradientes
 include("newton.jl") # incluindo o método de Newton 
 
 # cria uma imagem das bacias de atração geradas pelo Método de Newton baseando-se no número de iteradas utilizando a metodologia de 
@@ -56,3 +57,4 @@ function image_generator_iter(f,df,interval_x, interval_y, n_x, n_y; epsilon=1.e
 	return imagem
 
 end
+
