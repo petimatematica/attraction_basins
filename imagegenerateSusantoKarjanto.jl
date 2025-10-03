@@ -47,5 +47,3 @@ function image_generator_iter(f,df,interval_x, interval_y, n_x, n_y; epsilon=1.e
 	return imagem, Iter
 	
 end
-
-
