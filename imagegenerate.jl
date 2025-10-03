@@ -46,12 +46,6 @@ function generate_color_pairs(n::Int;l_min=60,l_max=75,c_min=60,c_max=75,h_min=0
     return dark_colors, light_colors
 end
 
-# n_x - número de células homogêneas da partição de interval_x
-# n_y - número de células homogêneas da partição de interval_x
-# R - vetor contendo todos os zeros da função f
-# l - parâmetro positivo que aumenta a luminosidade da imagem gerada
-
-
 # Criar uma imagem das bacias de atração geradas pelo Método de Newton
 #----------------------------------------------------------------------------------------------
 #= 
@@ -64,10 +58,10 @@ Variáveis obrigatória:
 - R (Vector{ComplexF64}) - vetor contendo todos os zeros da função f
 
 Variáveis opcionais:
-- epsilon (Float64) - tolerância prescrita ao Método de Newton
-- iter (Int64) - número máximo de iteradas
-- factor (Float64) - altera a tolerância do teste do erro absoluto
-- l (Float64) - altera a luminosidade da imagem
+- epsilon (Float64) - tolerância prescrita ao Método de Newton (padrão 10^{-12})
+- iter (Int64) - número máximo de iteradas (padrão 40)
+- factor (Float64) - altera a tolerância do teste do erro absoluto (padrão 10)
+- l (Float64) - altera a luminosidade da imagem (padrão 0)
 - l_m (Int64) - valor mínimo de luminosidade (valores possíveis: 0 a 100) (padrão 60)
 - l_M (Int64) - valor máximo de luminosidade (valores possíveis: 0 a 100) (padrão 75)
 - c_m (Int64) - valor mínimo de saturação (valores possíveis: 0 a 100) (padrão 80)
