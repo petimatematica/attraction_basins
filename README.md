@@ -23,7 +23,7 @@ n_x = 1280; n_y = 720
 
 # Função, derivada e zeros
 f(z)=z^3-1
-f'(z)=3*z^2
+df(z)=3*z^2
 Z=[1.0+0.0im;-1/2+sqrt(3)/2im;-1/2-sqrt(3)/2im]
 
 imagem = image_generator(f,df,interval_x, interval_y, n_x, n_y, Z; epsilon=1.e-12, iter = 40, factor=10, l=100)
