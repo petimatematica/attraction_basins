@@ -5,10 +5,10 @@ Este arquivo inclui os arquivos necessários, invoca uma função que gera a mat
 Suponha que desejamos gerar uma imagem que represente as bacias de atração da função complexa holomorfa 
 
 $$
-f(z)=z^3-1
+f(z)=z^3-1.
 $$
 
-para que possamos invocar as funções que geram a imagem, precisamos de sua derivada, seus zeros, uma região retangular que contenha esses zeros e a resolução desejada. Neste caso, $$df(z)=3z^2$$ (derivada de $$f$$), $z_1=1$, 
+Para que possamos invocar as funções que geram a imagem que representa as bacias de atração do Método de Newton para a referida equação, precisamos de sua derivada, seus zeros, uma região retangular que contenha esses zeros e a resolução desejada. Neste caso, $$df(z)=3z^2$$ (derivada de $$f$$), $z_1=1$, 
 $z_2=-\frac{1}{2}+i\frac{\sqrt{3}}{2}$, $z_2=-\frac{1}{2}-i\frac{\sqrt{3}}{2}$ (zeros de $f$), $\Omega=[-3.84,3.84]\times[-2.16,2.16]$ (Região retangular) e considere que gostaríamos de uma imagem com resolução HD, isto é 1280 x 720 pixels. Com essas informações, temos
 
 ```julia
